@@ -1,0 +1,30 @@
+pragma cashscript ^0.5.0;
+
+contract TimeLockedToken(
+    pubkey sender, 
+    pubkey recipient, 
+    string symbol,
+    string name,
+    int decimals,
+    int totalSupply) {
+
+    // 
+    function TimeLockedToken{
+
+        symbol = "TILL";
+        name = "TILL20";
+        decimals = "18";
+        totalSupply = 84000000 * 10**uint(decimals);
+    }
+
+    // Require recipient's signature to match
+    function transfer(sig recipientSig) {
+        require(checkSig(recipientSig, recipient));
+    }
+
+    // Require timeout time to be reached and sender's signature to match
+    function timeout(sig senderSig) {
+        require(checkSig(senderSig, sender));
+        require(tx.time >= timeout);
+    }
+}

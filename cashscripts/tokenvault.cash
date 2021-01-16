@@ -6,7 +6,8 @@ pragma cashscript ^0.5.0;
 // i.e. when the BCH price was $1000 in the past, an oracle entry with the old block number and price can not be used.
 // Instead, a message with a block number and price from after the minBlock needs to be passed.
 // This contract serves as a simple example for checkDataSig-based contracts.
-contract HodlVault(
+
+contract tokenVault(
     pubkey ownerPk,
     pubkey oraclePk,
     int minBlock,

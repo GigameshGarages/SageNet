@@ -1,2 +1,2 @@
 # TillNet
-Decentralised Finance on Bitcon Cash
+Tradeable Token Apps on Bitcon Cash

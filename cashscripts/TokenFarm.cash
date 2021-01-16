@@ -1,0 +1,24 @@
+pragma cashscript ^0.3.0;
+
+contract TokenFarm(bytes20 pkh) {
+
+	function spend(pubkey pk, sig s) {
+		
+		//verifies signature and pk->pkh
+		require(hash160(pk) == pkh);
+        require(checkSig(s, pk));
+
+	}
+
+	function validateDeposit(int balance, int deposit, int maxReturn) {
+		// no '*' arithmetic operator yet in Cashscript, so making do here for 10x return
+		int returnValue = deposit+deposit+deposit+deposit+deposit+deposit+deposit+deposit+deposit+deposit;
+
+		// verifies the 2nd sender has enough to cover the 10x transaction
+		require(int(balance) >= returnValue);
+		
+		// verifies the amount to be returned will not exceed ceiling limit
+		require(returnValue < maxReturn);
+	}
+
+}

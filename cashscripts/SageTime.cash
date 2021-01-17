@@ -1,6 +1,6 @@
 pragma cashscript ^0.5.0;
 
-contract TimeLockedToken(
+contract SageTime(
     pubkey sender, 
     pubkey recipient, 
     string symbol,
@@ -9,10 +9,10 @@ contract TimeLockedToken(
     int totalSupply) {
 
     // 
-    function TimeLockedToken{
+    function SageTime{
 
-        symbol = "TILL";
-        name = "TILL20";
+        symbol = "SGCH";
+        name = "SAGECASH";
         decimals = "18";
         totalSupply = 84000000 * 10**uint(decimals);
     }

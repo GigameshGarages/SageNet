@@ -1,6 +1,6 @@
 pragma cashscript ^0.5.7;
 
-contract TokenDelegation(bytes20 arbiter, bytes20 buyer, bytes20 seller) {
+contract SageEscrow(bytes20 arbiter, bytes20 buyer, bytes20 seller) {
     function spend(pubkey pk, sig s) {
         require(hash160(pk) == arbiter);
         require(checkSig(s, pk));

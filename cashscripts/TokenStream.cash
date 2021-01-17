@@ -1,0 +1,41 @@
+pragma cashscript ^0.5.0;
+
+contract TokenStream(
+    bytes20 recipient,
+    bytes20 funder,
+    int pledgePerBlock,
+    bytes4 initialBlock,
+) {
+    function receive(pubkey pk, sig s, int pledge) {
+        require(checkSig(s, pk));
+
+        int initial = int(initialBlock);
+        require(tx.time >= initial);
+
+        // Pledge amount calculation is done in client, verified in contract
+        // because multiplication is disabled in Bitcoin Script.
+        // We do an extra modulo check to verify correctness of the division
+        int passedBlocks = int(tx.locktime) - initial;
+        require(pledge / passedBlocks == pledgePerBlock);
+        require(pledge % passedBlocks == 0);
+
+        // Cut out old initialBlock (OP_PUSHBYTES_4 <initialBlock>)
+        // Insert new initialBlock (OP_PUSHBYTES_4 <tx.locktime>)
+        // Note that constructor parameters are added in reverse order,
+        // so initialBlock is actually the first statement in the contract bytecode.
+        bytes newContract = 0x04 + tx.locktime + tx.bytecode.split(5)[1];
+
+        // Create and enforce outputs
+        int minerFee = 1000; // hardcoded fee
+        bytes8 amount1 = bytes8(pledge);
+        bytes8 amount2 = bytes8(int(bytes(tx.value)) - pledge - minerFee);
+        bytes34 out1 = new OutputP2PKH(amount1, recipient);
+        bytes32 out2 = new OutputP2SH(amount2, hash160(newContract));
+        require(hash256(out1 + out2) == tx.hashOutputs);
+    }
+
+    function reclaim(pubkey pk, sig s) {
+        require(hash160(pk) == funder);
+        require(checkSig(s, pk));
+    }
+}

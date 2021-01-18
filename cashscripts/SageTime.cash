@@ -8,7 +8,7 @@ contract SageTime(
     int decimals,
     int totalSupply) {
 
-    function SageTime {
+    function SageTime() {
         symbol = "SGCH";
         name = "SAGECASH";
         decimals = "18";

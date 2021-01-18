@@ -22,11 +22,11 @@ contract SageVault(
         require(nSequence.length == 4);
         require(hashOutput.length == 32);
         require(tail.length == 8);
-        reqire(register.length == 32);
+        require(register.length == 8);
         require(mintAmount.length == 8);
         require(receiverPkh.length == 20);
-
         require(checkSig(s, pk));
+        
         bytes preimage = ver + hPhSo + scriptCode + value + nSequence + hashOutput + tail;
         require(checkDataSig(datasig(s), sha256(preimage), pk));
 

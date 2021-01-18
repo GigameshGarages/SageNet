@@ -1,8 +1,8 @@
 pragma cashscript ^0.5.0;
 
-contract SageEscrow(bytes20 arbiter, bytes20 buyer, bytes20 seller) {
+contract SageEscrow(bytes20 streamer, bytes20 buyer, bytes20 seller) {
     function spend(pubkey pk, sig s) {
-        require(hash160(pk) == arbiter);
+        require(hash160(pk) == streamer);
         require(checkSig(s, pk));
 
         // Create and enforce outputs

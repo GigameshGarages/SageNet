@@ -12,7 +12,7 @@ contract SageTime(
         symbol = "SGCH";
         name = "SAGECASH";
         decimals = "18";
-        totalSupply = 84000000 * 10**uint(decimals);
+        totalSupply = 84000000;
     }
 
     // Require recipient's signature to match

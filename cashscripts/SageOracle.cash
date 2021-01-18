@@ -11,6 +11,7 @@ contract tokenVault(
     pubkey ownerPk,
     pubkey oraclePk,
     int minBlock,
+    int maxBlock,
     int priceTarget
 ) {
     function spend(sig ownerSig, datasig oracleSig, bytes oracleMessage) {
@@ -19,7 +20,7 @@ contract tokenVault(
         int price = int(oracleMessage.split(4)[1]);
 
         // Check that blockHeight is after minBlock and not in the future
-        require(blockHeight >= minBlock);
+        require(blockHeight >= (maxBlock - minBlock));
         require(tx.time >= blockHeight);
 
         // Check that current price is at least priceTarget

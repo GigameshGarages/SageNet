@@ -2,7 +2,20 @@
 Multi Dimensional Money Streaming Vaults, Escrows and Yields on Bitcoin Cash Protocol 
 
 # Context
-In “Streaming Money,” Andreas guides the audience through a future where money acquires a new time dimension. Do you struggle with the temptation to go on spending sprees? What if you could render your money unspendable for a period of time? In the last episode, “Forkology,” he talked about what happens when there are rifts in consensus. Now he explores the implications of existing scripting capabilities in Bitcoin, and how those capabilities will expand even further with a second-layer protocol called the Lightning Network — more than a year before it would even go live on testnet in 2017!
+In “Streaming Money,” Andreas Antonopolous guides the audience through a future where money acquires a new time dimension. 
+
+# Concepts
+- Money streaming represents the idea of continuous payments over a finite period of time.
+- Block Numbers are used as a proxy of time to continuously update balances.
+
+# Workflow
+- A provider sets up a money streaming contract.
+- A prospective payer can interact with the contract and start the stream right away by depositing the funds required for the chosen period.
+- The payee is able to withdraw money from the contract based on its ongoing solvency
+- payment rate * stream factor (current block height - starting block height)
+- The stream terms (payment rate, length, metadata) can be updated at any time if both parties pledge their signatures.
+- The stream can be stopped at any point in time by any party without on-chain consensus.
+- If the stream period ended and it was not previously stopped by any party, the payee is entitled to withdraw all the deposited funds.
 
 # Components
 - Money Streaming Timer Tokens

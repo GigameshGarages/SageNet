@@ -1,7 +1,8 @@
 # Introduction
-Collection of Decentralised and Distributed Finance Tokenisation Experiments on Bitcoin Cash Protocol
+Multi Dimensional Money Streaming Vaults, Escrows and Yields on Bitcoin Cash Protocol 
 
 # Components
-- Money Vault
-- Money Streaming
-- Trade Escrow
+- Money Streaming Timer Tokens
+- Money Streaming Strategy Vaults
+- Money Streaming Yeild Farming
+- Money Streaming Indexed Oracles

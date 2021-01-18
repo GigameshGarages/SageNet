@@ -10,6 +10,6 @@ contract SageEscrow(bytes20 arbiter, bytes20 buyer, bytes20 seller) {
         bytes8 amount = bytes8(int(bytes(tx.value)) - minerFee);
         bytes34 buyerOutput = new OutputP2PKH(amount, buyer);
         bytes34 sellerOutput = new OutputP2PKH(amount, seller);
-        require(tx.hashOutputs == hash256(buyerOutput) || tx.hashOutputs == hash256(sellerOutput);
+        require(tx.hashOutputs == hash256(buyerOutput) || tx.hashOutputs == hash256(sellerOutput));
     }
 }

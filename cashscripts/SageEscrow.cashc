@@ -1,0 +1,40 @@
+{
+  "contractName": "SageEscrow",
+  "constructorInputs": [
+    {
+      "name": "arbiter",
+      "type": "bytes20"
+    },
+    {
+      "name": "buyer",
+      "type": "bytes20"
+    },
+    {
+      "name": "seller",
+      "type": "bytes20"
+    }
+  ],
+  "abi": [
+    {
+      "name": "spend",
+      "covenant": true,
+      "inputs": [
+        {
+          "name": "pk",
+          "type": "pubkey"
+        },
+        {
+          "name": "s",
+          "type": "sig"
+        }
+      ]
+    }
+  ],
+  "bytecode": "OP_3 OP_PICK OP_SIZE 34 OP_SUB OP_SPLIT OP_NIP OP_8 OP_SPLIT OP_4 OP_SPLIT OP_NIP 20 OP_SPLIT OP_DROP OP_6 OP_PICK OP_HASH160 OP_3 OP_ROLL OP_EQUALVERIFY OP_6 OP_ROLL OP_6 OP_ROLL OP_2DUP OP_SWAP OP_SIZE OP_1SUB OP_SPLIT OP_DROP OP_8 OP_ROLL OP_SHA256 OP_ROT OP_CHECKDATASIGVERIFY OP_CHECKSIGVERIFY e803 OP_ROT OP_BIN2NUM OP_SWAP OP_SUB OP_8 OP_NUM2BIN OP_DUP 1976a914 OP_CAT OP_3 OP_ROLL OP_CAT 88ac OP_CAT OP_SWAP 1976a914 OP_CAT OP_3 OP_ROLL OP_CAT 88ac OP_CAT OP_2 OP_PICK OP_ROT OP_HASH256 OP_EQUAL OP_ROT OP_ROT OP_HASH256 OP_EQUAL OP_BOOLOR",
+  "source": "pragma cashscript ^0.5.0;\n\ncontract SageEscrow(bytes20 arbiter, bytes20 buyer, bytes20 seller) {\n    function spend(pubkey pk, sig s) {\n        require(hash160(pk) == arbiter);\n        require(checkSig(s, pk));\n\n        // Create and enforce outputs\n        int minerFee = 1000; // hardcoded fee\n        bytes8 amount = bytes8(int(bytes(tx.value)) - minerFee);\n        bytes34 buyerOutput = new OutputP2PKH(amount, buyer);\n        bytes34 sellerOutput = new OutputP2PKH(amount, seller);\n        require(tx.hashOutputs == hash256(buyerOutput) || tx.hashOutputs == hash256(sellerOutput));\n    }\n}\n",
+  "compiler": {
+    "name": "cashc",
+    "version": "0.5.7"
+  },
+  "updatedAt": "2021-01-18T21:03:42.921Z"
+}

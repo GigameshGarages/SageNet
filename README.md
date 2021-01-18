@@ -18,7 +18,8 @@ Multi Dimensional Money Streaming Vaults, Escrows and Yields on Bitcoin Cash Pro
 - If the stream period ended and it was not previously stopped by any party, the payee is entitled to withdraw all the deposited funds.
 
 # Components
-- Money Streaming Timer Tokens
+- Money Streaming Consumption Tokens
+- Money Streaming Convergence Tokens
 - Money Streaming Strategy Vaults
 - Money Streaming Yeild Farming
 - Money Streaming Indexed Oracles

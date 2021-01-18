@@ -1,0 +1,55 @@
+contract SageVault(
+    pubkey pk,
+    bytes tokenId,
+    bytes tokenVersion
+) {
+    function mint(
+        sig s,
+        bytes ver,
+        bytes hPhSo,
+        bytes scriptCode,
+        bytes value,
+        bytes nSequence,
+        bytes hashOutput,
+        bytes tail,
+        bytes register,
+        bytes mintAmount,
+        bytes receiverPkh
+    ) {
+        require(ver.length == 4);
+        require(hPhSo.length == 100);
+        require(value.length == 8);
+        require(nSequence.length == 4);
+        require(hashOutput.length == 32);
+        require(tail.length == 8);
+        reqire(register.length == 32);
+        require(mintAmount.length == 8);
+        require(receiverPkh.length == 20);
+
+        require(checkSig(s, pk));
+        bytes preimage = ver + hPhSo + scriptCode + value + nSequence + hashOutput + tail;
+        require(checkDataSig(datasig(s), sha256(preimage), pk));
+
+        bytes opDup = 0x76;
+        bytes opHash160 = 0xa9;
+        bytes opEqual = 0x87;
+        bytes opEqualVerify = 0x88;
+        bytes opCheckSig = 0xac;
+        bytes opPush20Bytes = 0x14;
+
+        bytes out1ScriptVarInt = 0x39;
+        bytes mintMsgChunk1 = 0x6a04534c500001;
+        bytes mintMsgChunk2 = 0x044d494e5420;
+        bytes mintMsgChunk3 = 0x010208;
+        bytes out1_mint_msg = bytes8(int(0)) + out1ScriptVarInt + mintMsgChunk1 + tokenVersion + mintMsgChunk2 + tokenId + mintMsgChunk3 + mintAmount;
+
+        bytes out2ScriptVarInt = 0x19;
+        bytes out2_token_receiver = bytes8(int(546)) + out2ScriptVarInt + opDup + opHash160 + opPush20Bytes + receiverPkh + opEqualVerify + opCheckSig;
+
+        bytes out3ScriptVarInt = 0x17;
+        bytes rawscr = scriptCode.split(3)[1];
+        bytes out3_baton_output = bytes8(int(546)) + out3ScriptVarInt + opHash160 + opPush20Bytes + hash160(rawscr) + opEqual;
+
+        require(hash256(out1_mint_msg + out2_token_receiver + out3_baton_output) == bytes32(hashOutput));
+    }
+}

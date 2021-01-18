@@ -2,7 +2,7 @@
 Multi Dimensional Money Streaming Vaults, Escrows and Yields on Bitcoin Cash Protocol 
 
 # Context
-- Inspired by the  “Streaming Money,” lecure of Andreas Antonopolous where he envisions a future where money acquires a new time dimension. 
+- Inspired by the  “Streaming Money,” lecture of Andreas Antonopolous which is all about the spatio - temporal dimensions.
 
 # Concepts
 - Money streaming represents the idea of continuous payments over a finite period of time.

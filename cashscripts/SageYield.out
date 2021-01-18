@@ -1,0 +1,50 @@
+{
+  "contractName": "TokenFarm",
+  "constructorInputs": [
+    {
+      "name": "pkh",
+      "type": "bytes20"
+    }
+  ],
+  "abi": [
+    {
+      "name": "spend",
+      "covenant": false,
+      "inputs": [
+        {
+          "name": "pk",
+          "type": "pubkey"
+        },
+        {
+          "name": "s",
+          "type": "sig"
+        }
+      ]
+    },
+    {
+      "name": "YieldFarm",
+      "covenant": false,
+      "inputs": [
+        {
+          "name": "balance",
+          "type": "int"
+        },
+        {
+          "name": "deposit",
+          "type": "int"
+        },
+        {
+          "name": "maxReturn",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "bytecode": "OP_OVER OP_0 OP_NUMEQUAL OP_IF OP_2 OP_PICK OP_HASH160 OP_EQUALVERIFY OP_ROT OP_ROT OP_CHECKSIG OP_NIP OP_ELSE OP_SWAP OP_1 OP_NUMEQUALVERIFY OP_2 OP_PICK OP_3 OP_PICK OP_ADD OP_3 OP_PICK OP_ADD OP_3 OP_PICK OP_ADD OP_3 OP_PICK OP_ADD OP_3 OP_PICK OP_ADD OP_3 OP_PICK OP_ADD OP_3 OP_PICK OP_ADD OP_3 OP_PICK OP_ADD OP_3 OP_ROLL OP_ADD OP_ROT OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_ROT OP_LESSTHAN OP_NIP OP_ENDIF",
+  "source": "pragma cashscript ^0.5.7;\n\ncontract TokenFarm(bytes20 pkh) {\n\n\tfunction spend(pubkey pk, sig s) {\n\t\t\n\t//verifies signature and pk->pkh\n\t\trequire(hash160(pk) == pkh);\n        \trequire(checkSig(s, pk));\n\n\t}\n\n\tfunction YieldFarm(int balance, int deposit, int maxReturn) {\n\t\t// no '*' arithmetic operator yet in Cashscript, so making do here for 10x return\n\t\tint returnValue = deposit+deposit+deposit+deposit+deposit+deposit+deposit+deposit+deposit+deposit;\n\n\t\t// verifies the 2nd sender has enough to cover the 10x transaction\n\t\trequire(int(balance) >= returnValue);\n\t\t\n\t\t// verifies the amount to be returned will not exceed ceiling limit\n\t\trequire(returnValue < maxReturn);\n\t}\n\n}\n",
+  "compiler": {
+    "name": "cashc",
+    "version": "0.5.7"
+  },
+  "updatedAt": "2021-01-18T21:09:51.104Z"
+}

@@ -1,48 +1,76 @@
 {
-  "contractName": "tokenVault",
+  "contractName": "SageVault",
   "constructorInputs": [
     {
-      "name": "ownerPk",
+      "name": "pk",
       "type": "pubkey"
     },
     {
-      "name": "oraclePk",
-      "type": "pubkey"
+      "name": "tokenId",
+      "type": "bytes"
     },
     {
-      "name": "minBlock",
-      "type": "int"
-    },
-    {
-      "name": "priceTarget",
-      "type": "int"
+      "name": "tokenVersion",
+      "type": "bytes"
     }
   ],
   "abi": [
     {
-      "name": "spend",
+      "name": "mint",
       "covenant": false,
       "inputs": [
         {
-          "name": "ownerSig",
+          "name": "s",
           "type": "sig"
         },
         {
-          "name": "oracleSig",
-          "type": "datasig"
+          "name": "ver",
+          "type": "bytes"
         },
         {
-          "name": "oracleMessage",
+          "name": "hPhSo",
+          "type": "bytes"
+        },
+        {
+          "name": "scriptCode",
+          "type": "bytes"
+        },
+        {
+          "name": "value",
+          "type": "bytes"
+        },
+        {
+          "name": "nSequence",
+          "type": "bytes"
+        },
+        {
+          "name": "hashOutput",
+          "type": "bytes"
+        },
+        {
+          "name": "tail",
+          "type": "bytes"
+        },
+        {
+          "name": "register",
+          "type": "bytes"
+        },
+        {
+          "name": "mintAmount",
+          "type": "bytes"
+        },
+        {
+          "name": "receiverPkh",
           "type": "bytes"
         }
       ]
     }
   ],
-  "bytecode": "OP_6 OP_PICK OP_4 OP_SPLIT OP_DROP OP_BIN2NUM OP_7 OP_PICK OP_4 OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER OP_5 OP_ROLL OP_GREATERTHANOREQUAL OP_VERIFY OP_SWAP OP_CHECKLOCKTIMEVERIFY OP_DROP OP_3 OP_ROLL OP_GREATERTHANOREQUAL OP_VERIFY OP_3 OP_ROLL OP_4 OP_ROLL OP_3 OP_ROLL OP_CHECKDATASIGVERIFY OP_CHECKSIG",
-  "source": "  \npragma cashscript ^0.5.0;\n\n// This contract forces HODLing until a certain price target has been reached\n// A minimum block is provided to ensure that oracle price entries from before this block are disregarded\n// i.e. when the BCH price was $1000 in the past, an oracle entry with the old block number and price can not be used.\n// Instead, a message with a block number and price from after the minBlock needs to be passed.\n// This contract serves as a simple example for checkDataSig-based contracts.\n\ncontract tokenVault(\n    pubkey ownerPk,\n    pubkey oraclePk,\n    int minBlock,\n    int priceTarget\n) {\n    function spend(sig ownerSig, datasig oracleSig, bytes oracleMessage) {\n        // message: { blockheight, price }\n        int blockHeight = int(oracleMessage.split(4)[0]);\n        int price = int(oracleMessage.split(4)[1]);\n\n        // Check that blockHeight is after minBlock and not in the future\n        require(blockHeight >= minBlock);\n        require(tx.time >= blockHeight);\n\n        // Check that current price is at least priceTarget\n        require(price >= priceTarget);\n\n        // Handle necessary signature checks\n        require(checkDataSig(oracleSig, oracleMessage, oraclePk));\n        require(checkSig(ownerSig, ownerPk));\n    }\n}\n",
+  "bytecode": "OP_4 OP_PICK OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_5 OP_PICK OP_SIZE OP_NIP 64 OP_NUMEQUALVERIFY OP_7 OP_PICK OP_SIZE OP_NIP OP_8 OP_NUMEQUALVERIFY OP_8 OP_PICK OP_SIZE OP_NIP OP_4 OP_NUMEQUALVERIFY OP_9 OP_PICK OP_SIZE OP_NIP 20 OP_NUMEQUALVERIFY OP_10 OP_PICK OP_SIZE OP_NIP OP_8 OP_NUMEQUALVERIFY OP_11 OP_ROLL OP_SIZE OP_NIP OP_8 OP_NUMEQUALVERIFY OP_11 OP_PICK OP_SIZE OP_NIP OP_8 OP_NUMEQUALVERIFY OP_12 OP_PICK OP_SIZE OP_NIP 14 OP_NUMEQUALVERIFY OP_3 OP_PICK OP_OVER OP_CHECKSIGVERIFY OP_2ROT OP_SWAP OP_CAT OP_5 OP_PICK OP_CAT OP_6 OP_ROLL OP_CAT OP_6 OP_ROLL OP_CAT OP_6 OP_PICK OP_CAT OP_7 OP_ROLL OP_CAT OP_4 OP_ROLL OP_SIZE OP_1SUB OP_SPLIT OP_DROP OP_SWAP OP_SHA256 OP_ROT OP_CHECKDATASIGVERIFY 76 a9 87 88 ac 14 39 6a04534c500001 044d494e5420 010208 OP_0 OP_8 OP_NUM2BIN OP_4 OP_ROLL OP_CAT OP_3 OP_ROLL OP_CAT OP_10 OP_ROLL OP_CAT OP_ROT OP_CAT OP_8 OP_ROLL OP_CAT OP_SWAP OP_CAT OP_9 OP_ROLL OP_CAT 19 2202 OP_8 OP_NUM2BIN OP_SWAP OP_CAT OP_7 OP_ROLL OP_CAT OP_6 OP_PICK OP_CAT OP_2 OP_PICK OP_CAT OP_9 OP_ROLL OP_CAT OP_4 OP_ROLL OP_CAT OP_3 OP_ROLL OP_CAT 17 OP_6 OP_ROLL OP_3 OP_SPLIT OP_NIP 2202 OP_8 OP_NUM2BIN OP_ROT OP_CAT OP_6 OP_ROLL OP_CAT OP_4 OP_ROLL OP_CAT OP_SWAP OP_HASH160 OP_CAT OP_3 OP_ROLL OP_CAT OP_ROT OP_ROT OP_CAT OP_SWAP OP_CAT OP_HASH256 OP_EQUAL",
+  "source": "contract SageVault(\n    pubkey pk,\n    bytes tokenId,\n    bytes tokenVersion\n) {\n    function mint(\n        sig s,\n        bytes ver,\n        bytes hPhSo,\n        bytes scriptCode,\n        bytes value,\n        bytes nSequence,\n        bytes hashOutput,\n        bytes tail,\n        bytes register,\n        bytes mintAmount,\n        bytes receiverPkh\n    ) {\n        require(ver.length == 4);\n        require(hPhSo.length == 100);\n        require(value.length == 8);\n        require(nSequence.length == 4);\n        require(hashOutput.length == 32);\n        require(tail.length == 8);\n        require(register.length == 8);\n        require(mintAmount.length == 8);\n        require(receiverPkh.length == 20);\n        require(checkSig(s, pk));\n        \n        bytes preimage = ver + hPhSo + scriptCode + value + nSequence + hashOutput + tail;\n        require(checkDataSig(datasig(s), sha256(preimage), pk));\n\n        bytes opDup = 0x76;\n        bytes opHash160 = 0xa9;\n        bytes opEqual = 0x87;\n        bytes opEqualVerify = 0x88;\n        bytes opCheckSig = 0xac;\n        bytes opPush20Bytes = 0x14;\n\n        bytes out1ScriptVarInt = 0x39;\n        bytes mintMsgChunk1 = 0x6a04534c500001;\n        bytes mintMsgChunk2 = 0x044d494e5420;\n        bytes mintMsgChunk3 = 0x010208;\n        bytes out1_mint_msg = bytes8(int(0)) + out1ScriptVarInt + mintMsgChunk1 + tokenVersion + mintMsgChunk2 + tokenId + mintMsgChunk3 + mintAmount;\n\n        bytes out2ScriptVarInt = 0x19;\n        bytes out2_token_receiver = bytes8(int(546)) + out2ScriptVarInt + opDup + opHash160 + opPush20Bytes + receiverPkh + opEqualVerify + opCheckSig;\n\n        bytes out3ScriptVarInt = 0x17;\n        bytes rawscr = scriptCode.split(3)[1];\n        bytes out3_baton_output = bytes8(int(546)) + out3ScriptVarInt + opHash160 + opPush20Bytes + hash160(rawscr) + opEqual;\n\n        require(hash256(out1_mint_msg + out2_token_receiver + out3_baton_output) == bytes32(hashOutput));\n    }\n}\n",
   "compiler": {
     "name": "cashc",
     "version": "0.5.7"
   },
-  "updatedAt": "2021-01-18T21:08:18.146Z"
+  "updatedAt": "2021-01-18T21:32:01.863Z"
 }
